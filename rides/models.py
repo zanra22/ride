@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-# from accounts.models import User
+from django.utils import timezone
+from datetime import datetime
+from datetime import timedelta
 
 User = get_user_model()
 
@@ -19,6 +21,13 @@ class Ride(models.Model):
 
     def __str__(self):
         return str(self.id_ride)
+
+    def todays_ride_events(self):
+        # Calculate the datetime range for the last 24 hours
+        start_time = timezone.now() - timedelta(hours=24)
+
+        # Retrieve RideEvents occurred within the last 24 hours related to this Ride
+        return self.rideevent_set.filter(created_at__gte=start_time)
 
 
 class RideEvent(models.Model):
