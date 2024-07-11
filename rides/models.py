@@ -16,3 +16,13 @@ class Ride(models.Model):
     def __str__(self):
         return str(self.id_ride)
 
+
+class RideEvent(models.Model):
+    id_event = models.AutoField(primary_key=True)
+    id_ride = models.ForeignKey('rides.Ride', on_delete=models.CASCADE)
+    description = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.id_event)
+
