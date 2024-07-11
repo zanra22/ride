@@ -1,14 +1,44 @@
 from django.db import models
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+
+
+#User manager
+
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_staffuser(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_admin', False)
+        return self.create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_admin', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self.create_user(email, password, **extra_fields)
+
+
 
 #User models
-
 class User(AbstractBaseUser):
     id_user = models.AutoField(primary_key=True)
     role = models.CharField(max_length=50) #User`s role (Admin, Moderator, User)
     first_name = models.CharField(max_length=50) #User`s first name
     last_name = models.CharField(max_length=50) #User`s last name
-    email = models.CharField(max_length=50) #User`s email
+    email = models.CharField(max_length=50, unique=True) #User`s email
     phone_number = models.CharField(max_length=50) #User`s phone number
     active = models.BooleanField(default=True) #User`s active status (Active, Inactive)
     staff = models.BooleanField(default=False) #User is a staff member
@@ -18,6 +48,10 @@ class User(AbstractBaseUser):
 
     USERNAME_FIELD = 'email' #User`s email will act as the login credential
     REQUIRED_FIELDS = [] #Fields that will be required when running command `python manage.py createsuperuser`
+
+
+    objects = UserManager()
+
 
     def __str__(self):
         return self.email #User`s email will be displayed in the Django Admin
