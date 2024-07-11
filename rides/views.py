@@ -5,6 +5,9 @@ from .serializers import RideSerializer
 from .filters import RideFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
+from rest_framework.permissions import IsAuthenticated
+from accounts.permissions import IsAdminUser
+
 # Create your views here.
 
 
@@ -13,3 +16,4 @@ class RideViewSet(viewsets.ModelViewSet):
     queryset = Ride.objects.all()
     filter_backends = [DjangoFilterBackend]
     filterset_class = RideFilter
+    permission_classes = [IsAuthenticated, IsAdminUser]
