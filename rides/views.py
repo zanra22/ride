@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Ride
+from .models import Ride, RideEvent
 from .serializers import RideSerializer
 # Create your views here.
 

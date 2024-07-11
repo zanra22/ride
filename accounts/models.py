@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
@@ -8,11 +9,10 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('The Email must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save()
-        return user
+        user_obj = self.model(email=self.normalize_email(email), **extra_fields)
+        user_obj.set_password(password)
+        user_obj.save(using=self._db)
+        return user_obj
 
     def create_staffuser(self, email, password, **extra_fields):
         extra_fields.setdefault('staff', True)
@@ -36,10 +36,10 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     id_user = models.AutoField(primary_key=True)
     role = models.CharField(max_length=50) #User`s role (Admin, Moderator, User)
-    first_name = models.CharField(max_length=50) #User`s first name
-    last_name = models.CharField(max_length=50) #User`s last name
-    email = models.CharField(max_length=50, unique=True) #User`s email
-    phone_number = models.CharField(max_length=50) #User`s phone number
+    first_name = models.CharField(max_length=50, blank=True, null=True) #User`s first name
+    last_name = models.CharField(max_length=50, blank=True, null=True) #User`s last name
+    email = models.EmailField(max_length=50, unique=True) #User`s email
+    phone_number = models.CharField(max_length=50, blank=True, null=True) #User`s phone number
     active = models.BooleanField(default=True) #User`s active status (Active, Inactive)
     staff = models.BooleanField(default=False) #User is a staff member
     admin = models.BooleanField(default=False) #User can log into the Django Admin
