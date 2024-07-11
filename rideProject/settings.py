@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts',
     'rides',
     'rest_framework',
+    'django_filters',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
