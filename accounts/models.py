@@ -15,19 +15,19 @@ class UserManager(BaseUserManager):
         return user
 
     def create_staffuser(self, email, password, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_admin', False)
+        extra_fields.setdefault('staff', True)
+        extra_fields.setdefault('admin', False)
         return self.create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_admin', True)
-        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('staff', True)
+        extra_fields.setdefault('admin', True)
+        extra_fields.setdefault('active', True)
 
-        if extra_fields.get('is_staff') is not True:
+        if extra_fields.get('staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+        if extra_fields.get('admin') is not True:
+            raise ValueError('Superuser must have is_admin=True.')
         return self.create_user(email, password, **extra_fields)
 
 
@@ -64,15 +64,15 @@ class User(AbstractBaseUser):
 
     @property
     def is_staff(self):
-        return self.is_staff
+        return self.staff
 
     @property
     def is_admin(self):
-        return self.is_admin
+        return self.admin
 
     @property
     def is_active(self):
-        return self.is_active
+        return self.active
 
 
 
