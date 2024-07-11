@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rides',
     'rest_framework',
     'django_filters',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
+    'debug_toolbar',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -54,7 +55,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+# Required configuration to allow access from any IP address in development
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: True,
+}
 
 ROOT_URLCONF = 'rideProject.urls'
 
