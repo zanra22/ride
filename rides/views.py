@@ -26,6 +26,16 @@ class RideViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
     pagination_class = CustomPageNumberPagination
 
+    def create(self, request, *args, **kwargs):
+        #serializer_class specifies the serializer/deserializer to be used.
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            # if valid, save the data and return the response
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # if not valid, return the error
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def get_queryset(self):
         # Get all rides
         # select_related performs SQL join and includes the related field. In this case id_rider and id_driver.

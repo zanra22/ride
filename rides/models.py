@@ -10,7 +10,8 @@ User = get_user_model()
 
 class Ride(models.Model):
     id_ride = models.AutoField(primary_key=True)
-    status = models.CharField(max_length=50) #('en-route', 'pickup', 'dropoff')
+    status_choices = (('en-route', 'en-route'), ('pickup', 'pickup'), ('dropoff', 'dropoff'))
+    status = models.CharField(max_length=50, choices=status_choices)
     id_rider = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rider')
     id_driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='driver')
     pickup_latitude = models.FloatField()
