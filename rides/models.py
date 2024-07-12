@@ -26,7 +26,6 @@ class Ride(models.Model):
     def todays_ride_events(self):
         # Calculate the datetime range for the last 24 hours
         start_time = timezone.now() - timedelta(hours=24)
-
         # Retrieve RideEvents occurred within the last 24 hours related to this Ride
         return self.rideevent_set.filter(created_at__gte=start_time)
 

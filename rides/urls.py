@@ -10,4 +10,6 @@ urlpatterns = [
                                                                           'put': 'update',
                                                                           'delete': 'destroy'
                                                                           })),
+    path('event/', RideEventViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # path('event/<int:pk>/', EventViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
 ]
