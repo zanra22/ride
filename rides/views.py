@@ -29,10 +29,14 @@ class RideViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         #get_serializer specifies the serializer/deserializer to be used.
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            # if valid, save the data and return the response
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            if serializer.is_valid():
+                # if valid, save the data and return the response
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            # if not valid, return the error
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         # if not valid, return the error
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
