@@ -37,8 +37,6 @@ class RideViewSet(viewsets.ModelViewSet):
             Prefetch('rideevent_set',
                      queryset=RideEvent.objects.filter(created_at__gte=current_time - timedelta(hours=24)))
         )
-        # count() on the queryset to fetch the total number of objects. Ensures accurate pagination without extra queries.
-        self.total_count = queryset.count()
         return queryset
 
     #Customided list method to include total_count in the response.
@@ -48,5 +46,5 @@ class RideViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         # Add total count to response data for pagination purposes
-        response.data['total_count'] = self.total_count
+        response.data['total_count'] = self.paginator.page.paginator.count
         return response
