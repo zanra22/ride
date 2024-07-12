@@ -3,7 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 from .models import Ride, RideEvent
-from .serializers import RideSerializer
+from .serializers import RideSerializer, CreateRideSerializer
 from .filters import RideFilter
 from .pagination import CustomPageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -20,15 +20,23 @@ from django.db.models import Q, FilteredRelation, Prefetch
 
 
 class RideViewSet(viewsets.ModelViewSet):
-    serializer_class = RideSerializer
+    # serializer_class = RideSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = RideFilter
     permission_classes = [IsAuthenticated, IsAdminUser]
     pagination_class = CustomPageNumberPagination
 
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return RideSerializer
+        elif self.action == 'create':
+            return CreateRideSerializer
+        return RideSerializer
+
     def create(self, request, *args, **kwargs):
         #serializer_class specifies the serializer/deserializer to be used.
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # if valid, save the data and return the response
             serializer.save()
