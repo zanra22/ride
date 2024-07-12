@@ -28,14 +28,14 @@ class RideViewSet(viewsets.ModelViewSet):
 
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == 'list' or self.action == 'retrieve':
             return RideSerializer
-        elif self.action == 'create':
+        elif self.action == 'create' or self.action == 'update':
             return CreateRideSerializer
         return RideSerializer
 
     def create(self, request, *args, **kwargs):
-        #serializer_class specifies the serializer/deserializer to be used.
+        #get_serializer specifies the serializer/deserializer to be used.
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # if valid, save the data and return the response
