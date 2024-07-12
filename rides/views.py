@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Ride, RideEvent
-from .serializers import RideSerializer, CreateRideSerializer
+from .serializers import RideSerializer, CreateRideSerializer, RideEventSerializer
 from .filters import RideFilter
 from .pagination import CustomPageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -64,3 +64,9 @@ class RideViewSet(viewsets.ModelViewSet):
         # Add total count to response data for pagination purposes
         response.data['total_count'] = self.paginator.page.paginator.count
         return response
+
+
+class RideEventViewSet(viewsets.ModelViewSet):
+    queryset = RideEvent.objects.all()
+    serializer_class = RideEventSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
