@@ -36,7 +36,8 @@ class UserManager(BaseUserManager):
 #User models
 class User(AbstractBaseUser):
     id_user = models.AutoField(primary_key=True)
-    role = models.CharField(max_length=50) #User`s role (Admin, Moderator, User)
+    role_choices = (('Admin', 'Admin'), ('Rider', 'Rider'), ('Driver', 'Driver'))
+    role = models.CharField(max_length=50, choices=role_choices) #User`s role (Admin, Rider, Driver)
     first_name = models.CharField(max_length=50, blank=True, null=True) #User`s first name
     last_name = models.CharField(max_length=50, blank=True, null=True) #User`s last name
     email = models.EmailField(max_length=50, unique=True) #User`s email

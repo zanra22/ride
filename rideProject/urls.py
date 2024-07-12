@@ -28,4 +28,6 @@ if settings.DEBUG:
         path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
         path('admin/', admin.site.urls),
         path('', include('rides.urls')),
+        path('', include('accounts.urls')),
+        path('', include('reports.urls')),
     ]
