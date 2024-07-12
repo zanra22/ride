@@ -35,6 +35,9 @@ class RideViewSet(viewsets.ModelViewSet):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error({'Error creating ride': str(e)})
             # if not valid, return the error
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         # if not valid, return the error
