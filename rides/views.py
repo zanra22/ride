@@ -18,6 +18,7 @@ class RideViewSet(viewsets.ModelViewSet):
     filterset_class = RideFilter
     permission_classes = [IsAuthenticated, IsAdminUser]
     pagination_class = CustomPageNumberPagination
+    ordering_fields = ['pickup_time']
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
